@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WORKS | Kanan Oshiro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="index.html" class="logo">Kanan Oshiro</a>
+    <nav class="nav" aria-label="メインナビゲーション">
+      <a href="about.html">ABOUT</a>
+      <a href="works.html" class="active">WORKS</a>
+      <a href="skills.html">SKILLS</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </header>
+
+  <main class="works-main" id="works">
+    <!-- カテゴリフィルター -->
+    <div class="works-filter" role="tablist" aria-label="作品カテゴリ">
+      <button type="button" class="filter-btn active" data-filter="all">ALL</button>
+      <button type="button" class="filter-btn" data-filter="ai">AI CREATIVE</button>
+      <button type="button" class="filter-btn" data-filter="graphic">GRAPHIC DESIGN</button>
+      <button type="button" class="filter-btn" data-filter="video">VIDEO</button>
+      <button type="button" class="filter-btn" data-filter="web">WEB DESIGN</button>
+    </div>
+
+    <!-- ギャラリー一覧（JSで作品カードをレンダリング） -->
+    <section class="works-gallery" id="worksGallery" aria-label="制作実績一覧"></section>
+  </main>
+
+  <!-- 作品詳細ポップアップ（モーダル） -->
+  <div class="work-modal" id="workModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="work-modal-backdrop" id="modalBackdrop"></div>
+    <div class="work-modal-content">
+      <button type="button" class="work-modal-close" id="modalClose" aria-label="閉じる">&times;</button>
+      <div class="work-modal-media" id="modalMedia"></div>
+      <div class="work-modal-info">
+        <p class="work-modal-category" id="modalCategory"></p>
+        <h2 class="work-modal-title" id="modalTitle"></h2>
+        <p class="work-modal-meta" id="modalMeta"></p>
+        <p class="work-modal-desc" id="modalDesc"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 作品データ
+    const worksData = [
+      {
+        id: "fox-okinawa-1x1",
+        title: "旅するキツネ — 沖縄",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttfoka.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "琉装をまとったキツネがサンセットの海沿いの東屋から水平線を眺めるイラスト調のステッカー。フレームを外したフル画面展開で、ショート動画や縦型ビジュアルへの応用を意識して制作しました。"
+      },
+      {
+        id: "fox-osaka-1x1",
+        title: "旅するキツネ — 大阪",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttfosa.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "提灯や通天閣、たこ焼きなど新世界のにぎやかな夜の空気感を盛り込んだイラスト調のステッカー。キャラクターと街並みの世界観を統一して構成しました。"
+      },
+      {
+        id: "fox-fukuoka-1x1",
+        title: "旅するキツネ — 福岡",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttff.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "夜の博多屋台でラーメンを楽しむキツネを描いたイラスト調のステッカー。あたたかい屋台の光と福岡タワーの夜景のコントラストを意識しました。"
+      },
+            {
+        id: "fox-hokkaido-1x1",
+        title: "旅するキツネ — 北海道",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttfh.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "雪が舞う夕暮れの小樽運河沿いを、温かい冬着物と羽織をまとったキツネが歩くイラスト調のステッカー。レトロなガス灯やレンガ・石造り倉庫の灯りが水面に映える静かで幻想的な冬景色を表現しました。"
+      },
+      {
+        id: "fox-japan-1x1",
+        title: "旅するキツネ — 日本",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttfj.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "色鮮やかな紅葉に囲まれた展望スポットから、雪化粧の富士山と湖を眺めるキツネを描いたイラスト調のステッカー。秋の澄んだ空気感と日本らしい風景の奥行きが伝わるように構成しました。"
+      },
+      {
+        id: "fox-tokyo-1x1",
+        title: "旅するキツネ — 東京",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/sticker/ttft.png",
+        meta: "1:1 / AI Illustration",
+        description:
+          "春の日差しと桜が映える浅草仲見世通りで、みたらし団子を味わいながら歩くキツネのイラスト調のステッカー。提灯や仲見世の活気、奥に見える寺院の風景まで画面いっぱいに盛り込み、旅のワクワク感を表現しました。"
+      },
+      {
+        id: "bottle-holder-ad",
+        title: "ニットボトルホルダー 広告ショート動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/1_aicreative/video/bh.mp4",
+        meta: "15s / Short Video",
+        description:
+          "かぎ針編みのボトルホルダーの魅力を伝える15秒のショート動画。編み目の質感やカラーバリエーション、持ち運びやすさを短いカットと英語テロップでテンポよくまとめました。"
+      },
+      {
+        id: "fox-travel-short-video",
+        title: "旅するキツネ — 日本縦断ショート動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/1_aicreative/video/ttf/ttf.mp4",
+        meta: "Short Video / AI Animation",
+        description:
+          "着物や琉装をまとったキツネが日本各地の名所やグルメをめぐる「旅するキツネ」シリーズのショート動画。地域の空気感や季節のモチーフを生かしつつ、短い尺でも世界観と動きがスッと伝わるテンポにまとめました。"
+      },
+      {
+        id: "bintang-perfume-red-apple-banner",
+        title: "THE BINTANG PERFUME — RED APPLE バナー",
+        category: "ai",
+        categoryLabel: "AI CREATIVE",
+        type: "image",
+        src: "3_works/1_aicreative/banner/bprab_320x100.png", 
+        meta: "Banner / AI Visual",
+        description:
+          "水滴のついた真っ赤なりんごや白い花と香水ボトルを組み合わせ、みずみずしい香りの印象を表現した広告バナー。左側にビジュアル、右側に余白とタイポグラフィを配置し、香りの世界観と視認性の両立を意識してまとめました。"
+      },
+      {
+        id: "business-card-ko",
+        title: "オリジナル名刺デザイン",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/bc.jpg", 
+        meta: "Business Card / Illustrator",
+        description:
+          "表面には私のイニシャルである「K」と「O」に、旅行や動物が好きなのでパンダや飛行機、地球を組み合わせた遊び心のあるオリジナルロゴを配置し、裏面はシンプルなレイアウトとQRコードで必要な情報へスムーズにアクセスできるよう設計した両面名刺デザインです。"
+      },
+      {
+        id: "cafe-bar-soha-flyer",
+        title: "「cafe & bar SO-HA」オープン告知フライヤー",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/flyer.jpg", 
+        meta: "Flyer / Photoshop",
+        description:
+          "ゲストハウス併設のカフェ＆バー「SO-HA」のオープン告知フライヤー。時間帯ごとのメニューや地域の集まり・宿泊ゲストとの交流の魅力が伝わるよう、営業時間やアクセス情報まで視認性よく整理してレイアウトしました。"
+      },
+      {
+        id: "sora-osmanthus-black-tea-banner",
+        title: "「SORA OSMANTHUS × BLACK TEA」香水バナー",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/nd_300×250.jpg", 
+        meta: "300×250 / Photoshop",
+        description:
+          "金木犀と紅茶の香りをイメージしたフレグランスバナー。夜空を背景に注がれる紅茶と金木犀の花を組み合わせ、香りの奥行きと「NEW DEBUT」の特別感が一目で伝わるビジュアルにまとめました。"
+      },
+      {
+        id: "okinawa-typography-collage",
+        title: "「OKINAWA」タイポグラフィ・グラフィック",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/okinawa.jpg", 
+        meta: "Graphic Art / Photoshop",
+        description:
+          "縦に配置した「OKINAWA」の文字の中に青い海や首里城、サンセットの風景を切り抜き、周囲にタコライスや沖縄そば、エイサーなど沖縄らしさを散りばめた地域テーマのグラフィック作品です。"
+      },
+      {
+        id: "beniimo-fair-banner",
+        title: "「cafe & bar SO-HA」期間限定 紅いもフェアバナー",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/psp_300×250.jpg", 
+        meta: "300×250 / Photoshop",
+        description:
+          "秋限定の「紅いもフェア」告知バナー。紅いもモンブランチーズタルトと紅いもチャイラテをイメージし、紫から黄金色へのグラデーション背景と「期間限定」バッジで季節感と視認性を高めました。"
+      },
+      {
+        id: "skypiea-fantasy-collage",
+        title: "「SKYPIEA」ファンタジー・フォトコラージュ",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/skypiea.jpg", 
+        meta: "Graphic Art / Photoshop",
+        description:
+          "厚い雲海の上に浮かぶ古城と夜空に走る稲妻、空を舞うコウモリを組み合わせたダークファンタジー調の合成グラフィック。明暗のコントラストと奥行きを意識してドラマチックな世界観を表現しました。"
+      },
+      {
+        id: "universe-betta-collage",
+        title: "「UNIVERSE」宇宙×ベタ グラフィックアート",
+        category: "graphic",
+        categoryLabel: "GRAPHIC DESIGN",
+        type: "image",
+        src: "3_works/2_graphicdesign/universe.jpg", 
+        meta: "Graphic Art / Photoshop",
+        description:
+          "宇宙空間に浮かぶ地球と月、宇宙飛行士の周りを鮮やかなヒレを持つベタが泳ぐ幻想的なグラフィックアート。現実には交わらないモチーフを違和感なく馴染ませ、物語性のあるビジュアルに仕上げました。"
+      },
+      {
+        id: "j-beef-burgers-promo",
+        title: "「J-BEEF BURGERS」堺筋本町店 オープン告知動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/3_video/jbb/jbb.mp4", // 実際のファイルパスに合わせてください
+        meta: "0:15 / Premiere Pro",
+        description:
+          "「J-BEEF BURGERS」堺筋本町店のオープンと新規オープンキャンペーンを伝える15秒のプロモーション動画。筆文字風のテキストやポテト・バーガーのキャラクター、特別価格の訴求をテンポよく切り替え、短時間でもお得感とインパクトが伝わる構成にしました。"
+      },
+      {
+        id: "boku-no-ichinichi-dog-story",
+        title: "「ぼくの1日」ストーリー動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/3_video/dog.mp4",
+        meta: "1:03 / Premiere Pro",
+        description:
+          "ワンちゃんの目線で海辺の散歩や船上、棒をめぐるちょっとしたハプニングまでを描いた約1分のストーリー動画。丸みのあるポップなテロップと場面転換で、愛らしさや物語の展開が楽しく追えるようにまとめました。"
+      },
+      {
+        id: "plus-10-minutes-health-video",
+        title: "「毎日+10分 体を動かそう」啓発動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/3_video/moving.mp4",
+        meta: "0:46 / Premiere Pro",
+        description:
+          "日常に「+10分」の運動を取り入れるメリットを伝える動画。街並みや海岸沿いのサイクリング、フットサル、ランニングなど複数のシーンとトランジションを組み合わせ、無理なく始められそうな前向きさが伝わる構成にしています。"
+      },
+      {
+        id: "vietnam-lao-cai-animal-trip",
+        title: "「VIETNAM -Lao Cai- Animal Trip」旅ショート動画",
+        category: "video",
+        categoryLabel: "VIDEO",
+        type: "video",
+        src: "3_works/3_video/vietnam.mp4",
+        meta: "0:32 / Canva",
+        description:
+          "ベトナム・ラオカイの旅先で出会ったワンちゃんやニワトリとのふれあいを収めた縦型ショート動画。現地の空気感や動物たちの表情・仕草を活かし、旅ならではのあたたかくて癒やされる雰囲気に仕上げました。"
+      },
+      {
+        id: "hana-fragrance-ec",
+        title: "ECサイト「HA-NA Fragrance」",
+        category: "web",
+        categoryLabel: "WEB DESIGN",
+        type: "web",
+        src: "3_works/4_webdesign/ec-site-KananOshiro/HOME.html", 
+        meta: "HTML / CSS / JavaScript / jQuery (Slick)",
+        description:
+          "世界の香りを扱う架空のフレグランスショップ「HA-NA Fragrance」のECサイト。HOME・PERFUME・HAND&BODY・ROOM・CUSTOM MADEの全5ページ構成で、自動再生カルーセル、ブラー効果付きの固定ヘッダー、JavaScriptによるカテゴリ絞り込みフィルター、30種類の香料紹介ガイドなどを実装しました。"
+      },
+    ];
+
+    const galleryEl = document.getElementById("worksGallery");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    // ポップアップ要素
+    const modalEl = document.getElementById("workModal");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalClose = document.getElementById("modalClose");
+    const modalMedia = document.getElementById("modalMedia");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMeta = document.getElementById("modalMeta");
+    const modalDesc = document.getElementById("modalDesc");
+
+    function renderGallery(filter = "all") {
+      galleryEl.innerHTML = "";
+
+      const filteredItems =
+        filter === "all"
+          ? worksData
+          : worksData.filter((item) => item.category === filter);
+
+      filteredItems.forEach((item) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "work-card";
+        card.setAttribute("aria-label", `${item.title} の詳細を見る`);
+
+        const stage = document.createElement("div");
+        stage.className = "work-card-stage";
+
+        const fallback = document.createElement("div");
+        fallback.className = "work-card-fallback";
+        fallback.textContent = item.type === "video" ? "動画 / 画像" : "画像or動画";
+
+        if (item.type === "video") {
+          const video = document.createElement("video");
+          video.className = "work-card-media";
+          video.src = item.src;
+          video.muted = true;
+          video.loop = true;
+          video.playsinline = true;
+          video.preload = "metadata";
+          video.addEventListener("loadeddata", () => {
+            stage.classList.add("has-media");
+          });
+          card.addEventListener("mouseenter", () => video.play().catch(() => {}));
+          card.addEventListener("mouseleave", () => {
+            video.pause();
+            video.currentTime = 0;
+          });
+          stage.appendChild(video);
+        } else if (item.type === "web") {
+          // 実際のWebサイトをPCサイズ(1280x960)で読み込み、カードサイズに合わせて縮小表示
+          const previewWrap = document.createElement("div");
+          previewWrap.className = "work-card-web-preview";
+
+          const iframe = document.createElement("iframe");
+          iframe.src = item.src;
+          iframe.title = item.title;
+          iframe.loading = "lazy";
+          iframe.tabIndex = -1;
+
+          previewWrap.appendChild(iframe);
+          stage.classList.add("has-media");
+          stage.appendChild(previewWrap);
+
+          // カード幅に合わせて縮小率を自動計算
+          const updateScale = () => {
+            const stageWidth = stage.clientWidth;
+            if (stageWidth > 0) {
+              iframe.style.transform = `scale(${stageWidth / 1280})`;
+            }
+          };
+          requestAnimationFrame(updateScale);
+          window.addEventListener("resize", updateScale);
+        } else {
+          const img = document.createElement("img");
+          img.className = "work-card-media";
+          img.src = item.src;
+          img.alt = item.title;
+          img.loading = "lazy";
+          img.addEventListener("load", () => {
+            stage.classList.add("has-media");
+          });
+          img.addEventListener("error", () => {
+            stage.classList.remove("has-media");
+          });
+          stage.appendChild(img);
+        } 
+
+        stage.appendChild(fallback);
+        card.appendChild(stage);
+        card.addEventListener("click", () => openModal(item));
+        galleryEl.appendChild(card);
+      });
+    }
+
+function openModal(item) {
+      modalMedia.innerHTML = "";
+
+      if (item.type === "video") {
+        const video = document.createElement("video");
+        video.src = item.src;
+        video.controls = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.playsinline = true;
+        modalMedia.appendChild(video);
+      } else if (item.type === "web") {
+        const webWrap = document.createElement("div");
+        webWrap.className = "work-modal-web-wrap";
+
+        const iframe = document.createElement("iframe");
+        iframe.src = item.src;
+        iframe.title = item.title;
+        webWrap.appendChild(iframe);
+
+        const openLink = document.createElement("a");
+        openLink.href = item.src;
+        openLink.target = "_blank";
+        openLink.rel = "noopener noreferrer";
+        openLink.className = "work-modal-web-link";
+        openLink.textContent = "別タブでサイト全体を開く ↗";
+        webWrap.appendChild(openLink);
+
+        modalMedia.appendChild(webWrap);
+      } else {
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = item.title;
+        img.addEventListener("error", () => {
+          modalMedia.innerHTML = `<div class="work-modal-placeholder">${item.title}</div>`;
+        });
+        modalMedia.appendChild(img);
+      }
+
+      modalCategory.textContent = item.categoryLabel;
+      modalTitle.textContent = item.title;
+      modalMeta.textContent = item.meta;
+      modalDesc.textContent = item.description;
+
+      modalEl.classList.add("is-open");
+      modalEl.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    
+    function closeModal() {
+      const playingVideo = modalMedia.querySelector("video");
+      if (playingVideo) {
+        playingVideo.pause();
+      }
+      modalEl.classList.remove("is-open");
+      modalEl.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderGallery(btn.dataset.filter);
+      });
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", closeModal);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalEl.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+
+    // 初期表示
+    renderGallery("all");
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanan Oshiro | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="#home" class="logo">Kanan Oshiro</a>
+    <nav class="nav" aria-label="メインナビゲーション">
+      <a href="about.html">ABOUT</a>
+<a href="works.html">WORKS</a>
+      <a href="skills.html">SKILLS</a>
+      <a href="contact.html">CONTACT</a>  
+    </nav>
+  </header>
+
+  <main class="main" id="home">
+    <div class="hero-media-box" id="heroMediaBox">
+      <video
+        id="heroVideo"
+        class="hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+      >
+        <source src="1_home\beach.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-fallback">beach</div>
+    </div>
+  </main>
+
+  <script>
+    const heroVideo = document.getElementById("heroVideo");
+    const heroMediaBox = document.getElementById("heroMediaBox");
+
+    heroVideo.addEventListener("playing", () => {
+      heroMediaBox.classList.add("has-video");
+    });
+
+    window.addEventListener("pointerdown", () => {
+      if (heroVideo.paused) {
+        heroVideo.play().catch(() => {});
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>

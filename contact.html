@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONTACT | Kanan Oshiro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="index.html" class="logo">Kanan Oshiro</a>
+    <nav class="nav" aria-label="メインナビゲーション">
+      <a href="about.html">ABOUT</a>
+      <a href="works.html">WORKS</a>
+      <a href="skills.html">SKILLS</a>
+      <a href="contact.html" class="active">CONTACT</a>
+    </nav>
+  </header>
+
+  <main class="contact-main" id="contact">
+    <section class="contact-simple" aria-label="連絡先情報">
+      <h1 class="contact-heading">CONTACT</h1>
+      <p class="contact-lead">
+        AI画像・ショート動画制作やグラフィック・Web関連のご相談、お仕事のご連絡は下記メールアドレスよりお気軽にご連絡ください。
+      </p>
+
+      <div class="contact-block">
+        <span class="contact-label">EMAIL</span>
+        <div class="contact-mail-row">
+          <a href="sora0416kanan@gmail.com" class="contact-mail-link" id="mailAddress">
+            sora0416kanan@gmail.com
+          </a>
+          <button type="button" class="copy-mail-btn" id="copyMailBtn">
+            コピー
+          </button>
+        </div>
+        <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
+      </div>
+
+      <div class="contact-block">
+        <span class="contact-label">LINKS</span>
+        <ul class="contact-links">
+          <li><a href="https://www.instagram.com/kanan0416?gwpx=aGJ2eW82bDU0anNp" target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const copyMailBtn = document.getElementById("copyMailBtn");
+    const mailAddressEl = document.getElementById("mailAddress");
+    const copyFeedback = document.getElementById("copyFeedback");
+
+    copyMailBtn.addEventListener("click", async () => {
+      const address = mailAddressEl.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(address);
+        copyFeedback.textContent = "メールアドレスをコピーしました。";
+      } catch (err) {
+        copyFeedback.textContent = "コピーできませんでした。直接選択してコピーしてください。";
+      }
+      setTimeout(() => {
+        copyFeedback.textContent = "";
+      }, 2500);
+    });
+  </script>
+</body>
+</html>

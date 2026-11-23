@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABOUT | Kanan Oshiro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="index.html" class="logo">Kanan Oshiro</a>
+    <nav class="nav" aria-label="メインナビゲーション">
+      <a href="about.html" class="active">ABOUT</a>
+      <a href="works.html">WORKS</a>
+      <a href="skills.html">SKILLS</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </header>
+
+  <main class="about-main" id="about">
+    <div class="about-container">
+      <!-- プロフィール画像枠 -->
+      <div class="about-media-box" id="aboutMediaBox">
+        <img
+          src="2_about\ok.jpg"
+          alt="大城夏南 プロフィール画像"
+          class="about-profile-img"
+          onload="document.getElementById('aboutMediaBox').classList.add('has-image')"
+          onerror="document.getElementById('aboutMediaBox').classList.remove('has-image')"
+        />
+        <div class="about-fallback">プロフィール画像</div>
+      </div>
+
+      <!-- 氏名・自己紹介文 -->
+      <section class="about-content" aria-label="プロフィール紹介">
+        <h1 class="about-name">大城夏南（28歳）</h1>
+        <div class="about-bio">
+          <p>
+            沖縄県出身。AI画像・ショート動画を中心に、ビジュアル表現とストーリー性のあるコンテンツ制作に取り組んでいます。
+          </p>
+          <p>
+            キャラクターシリーズやSNS向けショート動画など、見る人の心に残る表現づくりを大切にしています。
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
